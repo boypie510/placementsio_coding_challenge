@@ -1,0 +1,20 @@
+<h1>Invoices</h1>
+
+<% if @invoices.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Line_Items</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @invoices.each do |invoice| %>
+        <tr>
+          <td><%= link_to 'Line_Items_List', invoice_line_items_path(invoice) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No invoices found.</p>
+<% end %>
