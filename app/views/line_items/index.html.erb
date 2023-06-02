@@ -1,0 +1,26 @@
+<h1>Line Items</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Booked Amount</th>
+      <th>Actual Amount</th>
+      <th>Adjustments</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @line_items.each do |line_item| %>
+      <tr class="line-item-row">
+        <td><%= line_item.name %></td>
+        <td><%= line_item.booked_amount %></td>
+        <td><%= line_item.actual_amount %></td>
+        <td><%= line_item.adjustments %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <%= paginate @line_items, outer_window: 1, inner_window: 2 %>
+</div>
