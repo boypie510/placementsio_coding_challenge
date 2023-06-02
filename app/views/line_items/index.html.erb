@@ -15,7 +15,12 @@
         <td><%= line_item.name %></td>
         <td><%= line_item.booked_amount %></td>
         <td><%= line_item.actual_amount %></td>
-        <td><%= line_item.adjustments %></td>
+        <td>
+          <%= form_with(model: line_item, url: line_item_path(line_item), local: true) do |form| %>
+            <%= form.text_field :adjustments, class: 'adjustments-field' %>
+            <%= form.submit 'Update' %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
