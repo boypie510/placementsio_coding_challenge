@@ -7,6 +7,7 @@
       <th>Booked Amount</th>
       <th>Actual Amount</th>
       <th>Adjustments</th>
+      <th>Billable Amount</th>
     </tr>
   </thead>
   <tbody>
@@ -21,6 +22,7 @@
             <%= form.submit 'Update' %>
           <% end %>
         </td>
+        <td><%= line_item.billable_amount %></td>
       </tr>
     <% end %>
   </tbody>
