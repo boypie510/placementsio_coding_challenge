@@ -1,0 +1,25 @@
+<table>
+  <thead>
+    <tr>
+      <th>Line Item Name</th>
+      <th>Campaign Name</th>
+      <th>Booked Amount</th>
+      <th>Actual Amount</th>
+      <th>Adjustments</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @line_items.each do |line_item| %>
+      <tr>
+        <td><%= line_item.name %></td>
+        <td><%= line_item.campaign.name %></td>
+        <td><%= line_item.booked_amount %></td>
+        <td><%= line_item.actual_amount %></td>
+        <td><%= line_item.adjustments %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<!-- Display pagination links -->
+<%= paginate @line_items %>
