@@ -7,4 +7,10 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   resources :line_items, only: %i[index update]
+
+  resources :campaigns do
+    member do
+      post :export_invoice
+    end
+  end
 end

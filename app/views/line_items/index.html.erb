@@ -12,6 +12,7 @@
       <th>Billable Amount</th>
       <th><%= sortable_column_link 'Campaign Name', 'campaign_id' %></th>
       <th>Campaign Sub-Totals</th>
+      <th>Export Invoice</th>
     </tr>
   </thead>
   <tbody>
@@ -29,6 +30,10 @@
           <td><%= line_item.billable_amount %></td>
           <td><%= line_item.campaign.name %></td>
           <td><%= @subtotals_by_campaign[line_item.campaign_id] %></td>
+          <td>
+            <%= button_to 'Export as XLSX', export_invoice_campaign_path(line_item.campaign_id, format: 'xlsx'), method: :post %>
+            <%= button_to 'Export as CSV', export_invoice_campaign_path(line_item.campaign_id, format: 'csv'), method: :post %>
+          </td>
         </tr>
       <% end %>
     </tbody>
