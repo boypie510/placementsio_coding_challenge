@@ -5,21 +5,17 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Booked Amount</th>
-      <th>Actual Amount</th>
-      <th>Adjustments</th>
+      <th><%= sortable_column_link 'Name', 'name' %></th>
+      <th><%= sortable_column_link 'Booked Amount', 'booked_amount' %></th>
+      <th><%= sortable_column_link 'Actual Amount', 'actual_amount' %></th>
+      <th><%= sortable_column_link 'Adjustments', 'adjustments' %></th>
       <th>Billable Amount</th>
+      <th><%= sortable_column_link 'Campaign Name', 'campaign_id' %></th>
       <th>Campaign Sub-Totals</th>
     </tr>
   </thead>
   <tbody>
-    <% @line_items_grouped_by_campaign.each do |campaign, line_items| %>
-      <tr class="campaign-subtotal-row">
-        <td colspan="5"><strong><%= campaign.name %></strong></td>
-        <td><%= @subtotals_by_campaign[campaign.id] %></td>
-      </tr>
-      <% line_items.each do |line_item| %>
+      <% @line_items.each do |line_item| %>
         <tr class="line-item-row">
           <td><%= line_item.name %></td>
           <td><%= line_item.booked_amount %></td>
@@ -31,11 +27,11 @@
             <% end %>
           </td>
           <td><%= line_item.billable_amount %></td>
-          <td></td>
+          <td><%= line_item.campaign.name %></td>
+          <td><%= @subtotals_by_campaign[line_item.campaign_id] %></td>
         </tr>
       <% end %>
-    <% end %>
-  </tbody>
+    </tbody>
 </table>
 
 <div class="pagination">
