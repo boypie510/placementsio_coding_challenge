@@ -1,0 +1,53 @@
+<h1><%= @campaign.name %></h1>
+
+<h2>Sub-Total: <%= @sub_total %></h2>
+
+<p>
+  <%= link_to 'Back to Campaign List', campaigns_path %>
+</p>
+
+<h2>Line Items</h2>
+
+<% if notice %>
+  <div class="notice">
+    <%= notice %>
+  </div>
+<% end %>
+
+<% if alert %>
+  <div class="alert">
+    <%= alert %>
+  </div>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th><%= sortable_column_link 'Name', 'name' %></th>
+      <th><%= sortable_column_link 'Booked Amount', 'booked_amount' %></th>
+      <th><%= sortable_column_link 'Actual Amount', 'actual_amount' %></th>
+      <th><%= sortable_column_link 'Adjustments', 'adjustments' %></th>
+      <th>Billable Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @line_items.each do |line_item| %>
+      <tr>
+        <td><%= line_item.name %></td>
+        <td><%= line_item.booked_amount %></td>
+        <td><%= line_item.actual_amount %></td>
+        <td>
+          <%= form_with(model: line_item, url: campaign_line_item_path(@campaign, line_item), local: true) do |form| %>
+            <%= form.text_field :adjustments %>
+            <%= form.submit 'Update' %>
+          <% end %>
+        </td>
+        <td><%= line_item.billable_amount %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <%= paginate @line_items, outer_window: 1, inner_window: 2 %>
+</div>

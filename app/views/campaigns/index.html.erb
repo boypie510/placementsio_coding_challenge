@@ -1,0 +1,27 @@
+<h1>Campaign List</h1>
+
+<h2>Invoice Grand Total: <%= @grand_total %></h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Reviewed</th>
+      <th>Export Invoice</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @campaigns.each do |campaign| %>
+      <tr>
+        <td><%= link_to campaign.name, campaign_path(campaign) %></td>
+        <td><%= campaign.reviewed %></td>
+        <td>
+          <%= button_to 'Export as XLSX', export_invoice_campaign_path(campaign, format: 'xlsx'), method: :post %>
+          <%= button_to 'Export as CSV', export_invoice_campaign_path(campaign, format: 'csv'), method: :post %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @campaigns %>

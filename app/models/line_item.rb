@@ -8,12 +8,6 @@ class LineItem < ApplicationRecord
 
   validates :name, :booked_amount, :actual_amount, :adjustments, presence: true
 
-  def self.subtotals_by_campaign(campaign_ids)
-    where(campaign_id: campaign_ids)
-      .group(:campaign_id)
-      .sum('actual_amount + adjustments')
-  end
-
   def self.invoice_grand_total
     sum('actual_amount + adjustments')
   end

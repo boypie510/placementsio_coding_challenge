@@ -1,4 +1,17 @@
+# frozen_string_literal: true
+
+# Campaign controller
 class CampaignsController < ApplicationController
+  def index
+    @campaigns = Campaign.page(params[:page]).per(25)
+    @grand_total = LineItem.invoice_grand_total
+  end
+
+  def show
+    @campaign = Campaign.find(params[:id])
+    @line_items = @campaign.line_items.includes(:campaign).page(params[:page]).per(25).order("#{sort_column} #{sort_direction}")
+    @sub_total = @campaign.line_items.sum('actual_amount + adjustments')
+  end
 
   def export_invoice
     @campaign = Campaign.find(params[:id])
@@ -49,5 +62,13 @@ class CampaignsController < ApplicationController
     end
 
     workbook
+  end
+
+  def sort_column
+    LineItem::SORTABLE_COLUMNS.include?(params[:sort_by]) ? params[:sort_by] : 'name'
+  end
+
+  def sort_direction
+    LineItem::SORTABLE_DIRECTION.include?(params[:sort_direction]) ? params[:sort_direction] : 'asc'
   end
 end

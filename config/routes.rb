@@ -6,11 +6,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  resources :line_items, only: %i[index update]
-
   resources :campaigns do
     member do
       post :export_invoice
     end
+    resources :line_items, only: %i[index update]
   end
 end
