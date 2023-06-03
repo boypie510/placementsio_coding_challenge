@@ -1,5 +1,7 @@
 <h1>Line Items</h1>
 
+<h2>Invoice Grand Total: <%= @grand_total %></h2>
+
 <table class="table">
   <thead>
     <tr>
@@ -8,22 +10,30 @@
       <th>Actual Amount</th>
       <th>Adjustments</th>
       <th>Billable Amount</th>
+      <th>Campaign Sub-Totals</th>
     </tr>
   </thead>
   <tbody>
-    <% @line_items.each do |line_item| %>
-      <tr class="line-item-row">
-        <td><%= line_item.name %></td>
-        <td><%= line_item.booked_amount %></td>
-        <td><%= line_item.actual_amount %></td>
-        <td>
-          <%= form_with(model: line_item, url: line_item_path(line_item), local: true) do |form| %>
-            <%= form.text_field :adjustments, class: 'adjustments-field' %>
-            <%= form.submit 'Update' %>
-          <% end %>
-        </td>
-        <td><%= line_item.billable_amount %></td>
+    <% @line_items_grouped_by_campaign.each do |campaign, line_items| %>
+      <tr class="campaign-subtotal-row">
+        <td colspan="5"><strong><%= campaign.name %></strong></td>
+        <td><%= @subtotals_by_campaign[campaign.id] %></td>
       </tr>
+      <% line_items.each do |line_item| %>
+        <tr class="line-item-row">
+          <td><%= line_item.name %></td>
+          <td><%= line_item.booked_amount %></td>
+          <td><%= line_item.actual_amount %></td>
+          <td>
+            <%= form_with(model: line_item, url: line_item_path(line_item), local: true) do |form| %>
+              <%= form.text_field :adjustments, class: 'adjustments-field' %>
+              <%= form.submit 'Update' %>
+            <% end %>
+          </td>
+          <td><%= line_item.billable_amount %></td>
+          <td></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

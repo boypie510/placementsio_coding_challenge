@@ -5,7 +5,13 @@ class LineItemsController < ApplicationController
   before_action :find_line_item, only: [:update]
 
   def index
-    @line_items = LineItem.page(params[:page]).per(25).order(:id)
+    @line_items = LineItem.includes(:campaign).page(params[:page]).per(25).order(:id)
+    @line_items_grouped_by_campaign = @line_items.group_by(&:campaign)
+
+    campaign_ids = @line_items_grouped_by_campaign.keys.map(&:id)
+    @subtotals_by_campaign = LineItem.subtotals_by_campaign(campaign_ids)
+
+    @grand_total = LineItem.invoice_grand_total
   end
 
   def update
