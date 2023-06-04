@@ -26,7 +26,12 @@
     <% @campaigns.each do |campaign| %>
       <tr>
         <td><%= link_to campaign.name, campaign_path(campaign) %></td>
-        <td><%= campaign.reviewed %></td>
+        <td>
+          <%= form_with(model: campaign, url: toggle_review_campaign_path(campaign), local: true) do |form| %>
+            <%= form.check_box :reviewed, checked: campaign.reviewed?, onchange: "this.form.submit()" %>
+            <%= form.label :reviewed, 'Reviewed' %>
+          <% end %>
+        </td>
         <td>
           <%= button_to 'Export as XLSX', export_invoice_campaign_path(campaign, format: 'xlsx'), method: :post %>
           <%= button_to 'Export as CSV', export_invoice_campaign_path(campaign, format: 'csv'), method: :post %>

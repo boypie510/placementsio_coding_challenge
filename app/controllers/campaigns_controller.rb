@@ -2,7 +2,7 @@
 
 # Campaign controller
 class CampaignsController < ApplicationController
-  before_action :find_campaign, only: %i[show export_invoice]
+  before_action :find_campaign, only: %i[show toggle_review export_invoice]
   before_action :check_currency_conversion_rate, only: :show
   CAMPAIGN_PER_PAGE = 25
   LINE_ITEM_PER_PAGE = 25
@@ -32,6 +32,18 @@ class CampaignsController < ApplicationController
     end
   rescue ArgumentError => e
     redirect_to campaigns_path, alert: e.message
+  end
+
+  def toggle_review
+    ActiveRecord::Base.transaction do
+      reviewed_boolean = !@campaign.reviewed
+      @campaign.update!(reviewed: reviewed_boolean)
+      @campaign.line_items.update_all(reviewed: reviewed_boolean)
+    end
+
+    redirect_to campaigns_path
+  rescue StandardError => e
+    redirect_to campaigns_path, alert: "Failed to toggle review: #{e.message}"
   end
 
   private

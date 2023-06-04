@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :campaigns do
     member do
       post :export_invoice
+      patch :toggle_review
     end
     resources :line_items, only: %i[index update] do
       member do
