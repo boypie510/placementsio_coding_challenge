@@ -19,19 +19,17 @@ Bucket 2:
 
 ## Implement Details and Thought Process
 
-Becausce I am more familiar with backend development, I focus on functionality instead of UI/UX.
-I chose to use built-in Rails MVC structure and server-side-render for the assignments.
+- Becausce I am more familiar with backend development, I focus on functionality instead of frontend/UI/UX.
+- I chose to use built-in Rails MVC structure and server-side-render for the assignments.
+- Design RESTful endpoint for basic CRUD function.
+- Seperate the main logic to service object instead of put on controller. Also write rspec for each service object.
 
-Design RESTful endpoint for basic CRUD function.
-Seperate the main logic to service object instead of put on controller. Also write rspec for each service object.
-
-For exporting CVS/XLS function
-- Using Tempfile ensures that each request has its own unique temporary file, avoiding race conditions and eliminating the need for manual cleanup.
-
-For intergation with Exchange rate API (https://www.exchangerate-api.com/docs/standard-requests)
-- Using an environment variable for the API key ensures secure handling of sensitive information.
-- Caching conversion rates: caches the conversion rates to improve performance and reduce API requests.
-- Error handling: raises a ConversionRateUnavailableError if the requested conversion rate is not available or cannot be fetched from the API. Logging errors and falling back to default conversion rates.
+- For exporting CVS/XLS function
+  - Using Tempfile ensures that each request has its own unique temporary file, avoiding race conditions and eliminating the need for manual cleanup.
+- For intergation with Exchange rate API (https://www.exchangerate-api.com/docs/standard-requests)
+  - Using an environment variable for the API key ensures secure handling of sensitive information.
+  - Caching conversion rates: caches the conversion rates to improve performance and reduce API requests.
+  - Error handling: raises a ConversionRateUnavailableError if the requested conversion rate is not available or cannot be fetched from the API. Logging errors and falling back to default conversion rates.
 
 ## How to use
 
