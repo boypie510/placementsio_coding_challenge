@@ -23,6 +23,7 @@ Bucket 2:
 - I chose to use built-in Rails MVC structure and server-side-render for the assignments.
 - Design RESTful endpoint for basic CRUD function.
 - Seperate the main logic to service object instead of put on controller. Also write rspec for each service object.
+- Calculate billable amount/sub-totals/grand-total: By calculating these amount dynamically, ensure that it stays accurate and reflects any changes in the actual_amount or adjustments. Storing it as a separate column would require additional management to keep it synchronized with the actual data.
 
 - For exporting CVS/XLS function
   - Using Tempfile ensures that each request has its own unique temporary file, avoiding race conditions and eliminating the need for manual cleanup.
