@@ -93,7 +93,19 @@ Set up the PostgreSQL database. Ensure you have PostgreSQL installed and running
 rails db:setup
 ```
 
-### 6. Start the Rails server:
+### 6. Setup Environment Variables
+
+CurrencyConversionService will use the EXCHANGE_RATE_API_KEY
+
+I store the EXCHANGE_RATE_API_KEY in .env and add it to .gitignore
+
+so you need to use following commands to generate .env file
+
+```shell
+cp .env.example .env
+```
+
+### 7. Start the Rails server:
 
 ```shell
 rails server
@@ -102,3 +114,12 @@ rails server
 The server will start running at http://127.0.0.1:3000.
 
 Go to http://127.0.0.1:3000/campaigns will see the campaigns list 
+
+
+## Test 
+
+Run all the rspec
+
+```shell
+bundle exec rspec
+```
