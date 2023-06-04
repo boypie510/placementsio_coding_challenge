@@ -19,17 +19,10 @@ class HandleCurrencyConversionRate
   private
 
   def fetch_conversion_rates
-    if cached_conversion_rates_expired?
+    Rails.cache.fetch('conversion_rates', expires_in: CACHE_EXPIRY) do
       conversion_rates = fetch_conversion_rates_from_api
-
-      # Cache the conversion rates with expiry time
-      Rails.cache.write('conversion_rates', conversion_rates, expires_in: CACHE_EXPIRY)
-    else
-      # Read conversion rates from cache
-      conversion_rates = Rails.cache.read('conversion_rates')
+      conversion_rates.presence || default_conversion_rates
     end
-
-    conversion_rates
   end
 
   def cached_conversion_rates_expired?
