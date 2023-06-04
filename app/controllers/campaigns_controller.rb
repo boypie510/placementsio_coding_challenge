@@ -2,6 +2,8 @@
 
 # Campaign controller
 class CampaignsController < ApplicationController
+  before_action :find_campaign, only: %i[show export_invoice]
+
   def index
     campaign_filter = CampaignFilterService.new(Campaign.all)
     filtered_campaigns, filtered_grand_total = campaign_filter.execute(filter_params)
@@ -11,13 +13,15 @@ class CampaignsController < ApplicationController
   end
 
   def show
-    @campaign = Campaign.find(params[:id])
     @line_items = @campaign.line_items.includes(:campaign).page(params[:page]).per(25).order("#{sort_column} #{sort_direction}")
-    @sub_total = @campaign.line_items.sum('actual_amount + adjustments')
+    @selected_currency = params[:currency] || 'USD'
+
+    handle_conversion_rate_exception do
+      @sub_total = LineItem.sub_total(@campaign.id, @selected_currency)
+    end
   end
 
   def export_invoice
-    @campaign = Campaign.find(params[:id])
     @line_items = @campaign.line_items
 
     respond_to do |format|
@@ -27,6 +31,10 @@ class CampaignsController < ApplicationController
   end
 
   private
+
+  def find_campaign
+    @campaign = Campaign.find(params[:id])
+  end
 
   def send_invoice_csv
     file_name = "campaign_invoice_export_#{Time.zone.today.strftime('%Y%m%d')}.csv"
@@ -77,5 +85,13 @@ class CampaignsController < ApplicationController
 
   def filter_params
     params.permit(:campaign_name, :reviewed)
+  end
+
+  def handle_conversion_rate_exception
+    yield
+  rescue CurrencyConversionService::ConversionRateUnavailableError
+    @selected_currency = 'USD'
+    @sub_total = LineItem.sub_total(@campaign.id, @selected_currency)
+    flash.now[:alert] = 'Failed to retrieve conversion rates. Using default currency (USD).'
   end
 end

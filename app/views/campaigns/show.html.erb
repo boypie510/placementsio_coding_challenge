@@ -1,6 +1,14 @@
 <h1><%= @campaign.name %></h1>
 
-<h2>Sub-Total: <%= @sub_total %></h2>
+<h2>Sub-Total: <%= "#{@sub_total} #{@selected_currency}" %></h2>
+
+<%= form_tag campaign_path(@campaign), method: :get, class: "filter-form" do %>
+  <div>
+    <%= label_tag :currency, "Currency" %>
+    <%= select_tag :currency, options_for_select(['USD', 'EUR', 'GBP'], @selected_currency) %>
+  </div>
+  <%= submit_tag "Apply" %>
+<% end %>
 
 <p>
   <%= link_to 'Back to Campaign List', campaigns_path %>
