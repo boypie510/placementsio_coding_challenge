@@ -3,17 +3,20 @@
 # Campaign controller
 class CampaignsController < ApplicationController
   before_action :find_campaign, only: %i[show export_invoice]
+  CAMPAIGN_PER_PAGE = 25
+  LINE_ITEM_PER_PAGE = 25
 
   def index
     campaign_filter = CampaignFilter.new(Campaign.all)
     filtered_campaigns = campaign_filter.execute(filter_params)
 
-    @campaigns = filtered_campaigns.page(params[:page]).per(25)
+    @campaigns = filtered_campaigns.page(params[:page]).per(CAMPAIGN_PER_PAGE)
     @grand_total = filtered_campaigns.joins(:line_items).sum('line_items.actual_amount + line_items.adjustments')
   end
 
   def show
-    @line_items = @campaign.line_items.includes(:campaign).page(params[:page]).per(25).order("#{sort_column} #{sort_direction}")
+    @line_items =
+      @campaign.line_items.includes(:campaign).page(params[:page]).per(LINE_ITEM_PER_PAGE).order(sort_column => sort_direction)
     @selected_currency = params[:currency] || 'USD'
 
     handle_conversion_rate_exception do
