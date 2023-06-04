@@ -1,6 +1,41 @@
 # PlacementioCodingChallenge
 
-This README provides the necessary steps to get the PlacementioCodingChallenge application up and running.
+### Implement Parts
+
+Bucket 1:
+- The user should be able browse through the line-item data as either a list or table (ie. pagination or infinite-scrolling).
+- The user should be able to edit line-item "adjustments".
+- The user should be able to see each line-item's billable amount (sub-total = actuals + adjustments).
+- The user should be able to see sub-totals grouped by campaign (line-items grouped by their parent campaign).
+- The user should be able to see the invoice grand-total (sum of each line-item's billable amount).
+- The user should be able to sort the data.
+- The user should be able to output the invoice to *.CSV, *.XLS, etc.
+- The user should be able flag individual line-items as "reviewed" (meaning they are disabled from further editing).
+- The user should be able flag "campaigns" as being reviewed, as well.
+
+Bucket 2:
+- An integration into an external service that makes sense (eg. a currency conversion service, an export to Amazon S3, etc)
+- The user should be able to filter the data (ie. by campaign name, etc., should affect the grand-total).
+
+## Implement Details and Thought Process
+
+Becausce I am more familiar with backend development, I focus on functionality instead of UI/UX.
+I chose to use built-in Rails MVC structure and server-side-render for the assignments.
+
+Design RESTful endpoint for basic CRUD function.
+Seperate the main logic to service object instead of put on controller. Also write rspec for each service object.
+
+For exporting CVS/XLS function
+- Using Tempfile ensures that each request has its own unique temporary file, avoiding race conditions and eliminating the need for manual cleanup.
+
+For intergation with Exchange rate API (https://www.exchangerate-api.com/docs/standard-requests)
+- Using an environment variable for the API key ensures secure handling of sensitive information.
+- Caching conversion rates: caches the conversion rates to improve performance and reduce API requests.
+- Error handling: raises a ConversionRateUnavailableError if the requested conversion rate is not available or cannot be fetched from the API. Logging errors and falling back to default conversion rates.
+
+## How to use
+
+Following provides the necessary steps to get the PlacementioCodingChallenge application up and running.
 
 ## Ruby version
 
