@@ -12,8 +12,7 @@ class LineItem < ApplicationRecord
     actual_amount + adjustments
   end
 
-  def self.sub_total(campaign_id, currency)
-    conversion_rate = currency == 'USD' ? 1 : CurrencyConversionService.new.execute(currency)
+  def self.sub_total(campaign_id, conversion_rate)
     sum_of_billable_amounts = where(campaign_id: campaign_id).sum(&:billable_amount)
     sum_of_billable_amounts * conversion_rate
   end

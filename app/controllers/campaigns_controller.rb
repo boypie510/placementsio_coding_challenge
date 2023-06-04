@@ -3,6 +3,7 @@
 # Campaign controller
 class CampaignsController < ApplicationController
   before_action :find_campaign, only: %i[show export_invoice]
+  before_action :check_currency_conversion_rate, only: :show
   CAMPAIGN_PER_PAGE = 25
   LINE_ITEM_PER_PAGE = 25
 
@@ -17,11 +18,8 @@ class CampaignsController < ApplicationController
   def show
     @line_items =
       @campaign.line_items.includes(:campaign).page(params[:page]).per(LINE_ITEM_PER_PAGE).order(sort_column => sort_direction)
-    @selected_currency = params[:currency] || 'USD'
 
-    handle_conversion_rate_exception do
-      @sub_total = LineItem.sub_total(@campaign.id, @selected_currency)
-    end
+    @sub_total = LineItem.sub_total(@campaign.id, @conversion_rate)
   end
 
   def export_invoice
@@ -64,11 +62,13 @@ class CampaignsController < ApplicationController
     params.permit(:campaign_name, :reviewed)
   end
 
-  def handle_conversion_rate_exception
-    yield
+  def check_currency_conversion_rate
+    @selected_currency = params[:currency] || 'USD'
+
+    @conversion_rate = @selected_currency == 'USD' ? 1 : HandleCurrencyConversionRate.new.execute(@selected_currency)
   rescue CurrencyConversionService::ConversionRateUnavailableError
     @selected_currency = 'USD'
-    @sub_total = LineItem.sub_total(@campaign.id, @selected_currency)
+    @conversion_rate = CurrencyConversionService.new.execute(@selected_currency)
     flash.now[:alert] = 'Failed to retrieve conversion rates. Using default currency (USD).'
   end
 end
