@@ -83,4 +83,22 @@ This should display the version of PostgreSQL installed on their system, which s
 
 ```shell
 bundle install
-``
+```
+
+### 5. DataBase setup
+
+Set up the PostgreSQL database. Ensure you have PostgreSQL installed and running on your system. Then, run the following commands to create and initialize the database:
+
+```shell
+rails db:setup
+```
+
+### 6. Start the Rails server:
+
+```shell
+rails server
+```
+
+The server will start running at http://127.0.0.1:3000.
+
+Go to http://127.0.0.1:3000/campaigns will see the campaigns list 
