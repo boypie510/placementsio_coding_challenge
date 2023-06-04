@@ -36,6 +36,7 @@
       <th><%= sortable_column_link 'Actual Amount', 'actual_amount' %></th>
       <th><%= sortable_column_link 'Adjustments', 'adjustments' %></th>
       <th>Billable Amount</th>
+      <th>Reviewed Status</th>
     </tr>
   </thead>
   <tbody>
@@ -46,11 +47,19 @@
         <td><%= line_item.actual_amount %></td>
         <td>
           <%= form_with(model: line_item, url: campaign_line_item_path(@campaign, line_item), local: true) do |form| %>
-            <%= form.text_field :adjustments %>
-            <%= form.submit 'Update' %>
+            <%= form.text_field :adjustments, disabled: line_item.reviewed? %>
+            <% unless line_item.reviewed? %>
+              <%= form.submit 'Update' %>
+            <% end %>
           <% end %>
         </td>
         <td><%= line_item.billable_amount %></td>
+        <td>
+          <%= form_with(model: line_item, url: toggle_review_campaign_line_item_path(@campaign, line_item), local: true) do |form| %>
+            <%= form.check_box :reviewed, checked: line_item.reviewed?, onchange: "this.form.submit()" %>
+            <%= form.label :reviewed, 'Reviewed' %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

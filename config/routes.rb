@@ -10,6 +10,10 @@ Rails.application.routes.draw do
     member do
       post :export_invoice
     end
-    resources :line_items, only: %i[index update]
+    resources :line_items, only: %i[index update] do
+      member do
+        patch :toggle_review
+      end
+    end
   end
 end
