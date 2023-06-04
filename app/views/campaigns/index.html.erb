@@ -2,6 +2,18 @@
 
 <h2>Invoice Grand Total: <%= @grand_total %></h2>
 
+<%= form_tag campaigns_path, method: :get, class: "filter-form" do %>
+  <div>
+    <%= label_tag :campaign_name, "Campaign Name" %>
+    <%= text_field_tag :campaign_name, params[:campaign_name] %>
+  </div>
+  <div>
+    <%= label_tag :reviewed, "Reviewed Status" %>
+    <%= select_tag :reviewed, options_for_select([['All', ''], ['Reviewed', 'true'], ['Not Reviewed', 'false']], params[:reviewed_status]) %>
+  </div>
+  <%= submit_tag "Filter" %>
+<% end %>
+
 <table>
   <thead>
     <tr>

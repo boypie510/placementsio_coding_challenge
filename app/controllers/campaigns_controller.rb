@@ -3,8 +3,11 @@
 # Campaign controller
 class CampaignsController < ApplicationController
   def index
-    @campaigns = Campaign.page(params[:page]).per(25)
-    @grand_total = LineItem.invoice_grand_total
+    campaign_filter = CampaignFilterService.new(Campaign.all)
+    filtered_campaigns, filtered_grand_total = campaign_filter.execute(filter_params)
+
+    @campaigns = filtered_campaigns.page(params[:page]).per(25)
+    @grand_total = filtered_grand_total
   end
 
   def show
@@ -70,5 +73,9 @@ class CampaignsController < ApplicationController
 
   def sort_direction
     LineItem::SORTABLE_DIRECTION.include?(params[:sort_direction]) ? params[:sort_direction] : 'asc'
+  end
+
+  def filter_params
+    params.permit(:campaign_name, :reviewed)
   end
 end

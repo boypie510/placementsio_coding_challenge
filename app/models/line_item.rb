@@ -8,10 +8,6 @@ class LineItem < ApplicationRecord
 
   validates :name, :booked_amount, :actual_amount, :adjustments, presence: true
 
-  def self.invoice_grand_total
-    sum('actual_amount + adjustments')
-  end
-
   def billable_amount
     actual_amount + adjustments
   end
