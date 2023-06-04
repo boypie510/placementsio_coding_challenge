@@ -78,9 +78,9 @@ class CampaignsController < ApplicationController
     @selected_currency = params[:currency] || 'USD'
 
     @conversion_rate = @selected_currency == 'USD' ? 1 : HandleCurrencyConversionRate.new.execute(@selected_currency)
-  rescue CurrencyConversionService::ConversionRateUnavailableError
+  rescue HandleCurrencyConversionRate::ConversionRateUnavailableError
     @selected_currency = 'USD'
-    @conversion_rate = CurrencyConversionService.new.execute(@selected_currency)
+    @conversion_rate = HandleCurrencyConversionRate.new.execute(@selected_currency)
     flash.now[:alert] = 'Failed to retrieve conversion rates. Using default currency (USD).'
   end
 end
