@@ -17,7 +17,7 @@ class CampaignFilter
   def filter_by_campaign_name(campaigns, campaign_name)
     return campaigns unless campaign_name.present?
 
-    campaigns.where('campaigns.name LIKE ?', "%#{sanitize_sql_like(campaign_name)}%")
+    campaigns.where('campaigns.name LIKE ?', "%#{Campaign.sanitize_sql_like(campaign_name)}%")
   end
 
   def filter_by_reviewed(campaigns, reviewed)
