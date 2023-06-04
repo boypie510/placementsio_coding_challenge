@@ -5,11 +5,11 @@ class CampaignsController < ApplicationController
   before_action :find_campaign, only: %i[show export_invoice]
 
   def index
-    campaign_filter = CampaignFilterService.new(Campaign.all)
-    filtered_campaigns, filtered_grand_total = campaign_filter.execute(filter_params)
+    campaign_filter = CampaignFilter.new(Campaign.all)
+    filtered_campaigns = campaign_filter.execute(filter_params)
 
     @campaigns = filtered_campaigns.page(params[:page]).per(25)
-    @grand_total = filtered_grand_total
+    @grand_total = filtered_campaigns.joins(:line_items).sum('line_items.actual_amount + line_items.adjustments')
   end
 
   def show
